@@ -176,6 +176,48 @@ For manual notifications (composer), `data.type` is `"notification"` and `data.d
 
 ---
 
+## Security
+
+### Service account key
+
+> **⚠️ The service account JSON grants full Firebase Cloud Messaging access for your project. Treat it like a password.**
+
+| What the plugin does | What you must do |
+|---|---|
+| Stores the file in `wp-content/uploads/fcm-push-private/` | **Never commit** the file to version control |
+| Creates `.htaccess` with `Deny from all` | If your server runs **Nginx**, add a deny rule manually (see below) |
+| Sets file permissions to `chmod 600` | Keep your WordPress server and `wp-content` directory non-publicly writable |
+| Never writes the key content to the database | Verify your backup system does not expose `wp-content/uploads/` publicly |
+
+**If the key is compromised:** go to [Firebase Console → Project settings → Service accounts](https://console.firebase.google.com) and immediately revoke/regenerate the key. Then re-upload the new JSON in the plugin settings.
+
+#### Nginx users
+
+Apache's `.htaccess` has no effect on Nginx. Add this block to your server config to protect the directory:
+
+```nginx
+location ~* /wp-content/uploads/fcm-push-private/ {
+    deny all;
+    return 404;
+}
+```
+
+#### What the service account can do
+
+The plugin requests only the `firebase.messaging` OAuth2 scope:
+
+```
+https://www.googleapis.com/auth/firebase.messaging
+```
+
+This allows sending messages via FCM. It does **not** grant access to Firestore, Storage, Auth, or any other Firebase service. If your project requires a more restricted key, create a dedicated service account in Google Cloud IAM with only the **Firebase Cloud Messaging API** role.
+
+### WordPress permissions
+
+Only users with the `manage_options` capability (Administrators) can access the plugin settings or the notification composer. Standard editors and authors cannot send notifications or view credentials.
+
+---
+
 ## File structure
 
 ```
