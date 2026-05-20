@@ -1,5 +1,5 @@
 === FCM Push Notify ===
-Contributors: rafaelmarreca
+Contributors: rafael145a
 Tags: fcm, firebase, push notifications, mobile, cloud messaging
 Requires at least: 5.8
 Tested up to: 6.9
@@ -8,7 +8,11 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Send Firebase Cloud Messaging (FCM HTTP v1) push notifications to mobile apps — automatically on post publish or manually via a notification composer.
+Send Firebase Cloud Messaging push notifications to mobile apps automatically on post publish or via a dedicated notification composer.
+
+== Disclaimer ==
+
+Firebase and Firebase Cloud Messaging (FCM) are trademarks of Google LLC. This plugin is not affiliated with or endorsed by Google.
 
 == Description ==
 

@@ -1,18 +1,23 @@
 <?php
 /**
- * Plugin Name: FCM Push Notify
- * Description: Send Firebase Cloud Messaging (FCM HTTP v1) push notifications to mobile apps when posts are published, or manually via a dedicated notification composer. Zero external dependencies — uses WordPress HTTP API + OpenSSL only.
- * Version:     1.0.0
- * Author:      Rafael Marreca
- * License:     GPL-2.0-or-later
- * Text Domain: fcm-push-notify
- * Requires PHP: 7.4
+ * Plugin Name:       FCM Push Notify
+ * Plugin URI:        https://github.com/rafael145a/fcm-push-notify
+ * Description:       Send Firebase Cloud Messaging (FCM HTTP v1) push notifications to mobile apps when posts are published, or manually via a dedicated notification composer. Zero external dependencies.
+ * Version:           1.0.0
+ * Author:            Rafael Marreca
+ * Author URI:        https://github.com/rafael145a
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       fcm-push-notify
+ * Domain Path:       /languages
+ * Requires PHP:      7.4
+ * Requires at least: 5.8
  *
  * Uses FCM topic subscriptions — the app subscribes via subscribeToTopic().
  * No device tokens stored, no PII, no custom database tables.
  *
- * Service account JSON: stored outside the database in
- * wp-content/uploads/fcm-push-private/ (.htaccess deny + chmod 600).
+ * Firebase and Firebase Cloud Messaging are trademarks of Google LLC.
+ * This plugin is not affiliated with or endorsed by Google.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -22,13 +27,8 @@ define( 'FCM_PUSH_FILE', __FILE__ );
 define( 'FCM_PUSH_DIR', plugin_dir_path( __FILE__ ) );
 define( 'FCM_PUSH_SLUG', 'fcm-push-notify' );
 
-// WordPress option key for serialised settings.
 define( 'FCM_PUSH_OPTION', 'fcm_push_settings' );
-
-// Post meta key that marks a push as already sent (idempotency).
 define( 'FCM_PUSH_META_SENT', '_fcm_push_sent_at' );
-
-// Custom post type slug.
 define( 'FCM_PUSH_CPT', 'fcm_push_notif' );
 
 require_once FCM_PUSH_DIR . 'includes/class-fcm-client.php';

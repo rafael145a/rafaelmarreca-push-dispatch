@@ -47,13 +47,18 @@ class FCM_Push_CPT {
 		register_post_type(
 			FCM_PUSH_CPT,
 			[
-				'label'           => 'Notifications',
+				'label'           => __( 'Notifications', 'fcm-push-notify' ),
 				'labels'          => [
-					'name'          => 'Notifications',
-					'singular_name' => 'Notification',
-					'add_new_item'  => 'New Notification',
-					'edit_item'     => 'Edit Notification',
-					'menu_name'     => 'Notifications',
+					'name'               => _x( 'Notifications', 'post type general name', 'fcm-push-notify' ),
+					'singular_name'      => _x( 'Notification', 'post type singular name', 'fcm-push-notify' ),
+					'add_new_item'       => __( 'New Notification', 'fcm-push-notify' ),
+					'edit_item'          => __( 'Edit Notification', 'fcm-push-notify' ),
+					'menu_name'          => _x( 'Notifications', 'admin menu', 'fcm-push-notify' ),
+					'add_new'            => __( 'New Notification', 'fcm-push-notify' ),
+					'view_item'          => __( 'View Notification', 'fcm-push-notify' ),
+					'search_items'       => __( 'Search Notifications', 'fcm-push-notify' ),
+					'not_found'          => __( 'No notifications found.', 'fcm-push-notify' ),
+					'not_found_in_trash' => __( 'No notifications found in Trash.', 'fcm-push-notify' ),
 				],
 				'public'          => false,
 				'show_ui'         => true,
@@ -69,7 +74,7 @@ class FCM_Push_CPT {
 	public static function add_meta_box(): void {
 		add_meta_box(
 			'fcm-push-target',
-			'Send to',
+			__( 'Send to', 'fcm-push-notify' ),
 			[ __CLASS__, 'render_meta_box' ],
 			FCM_PUSH_CPT,
 			'side',
@@ -97,7 +102,7 @@ class FCM_Push_CPT {
 		echo '<div class="mp-fields-group">';
 
 		echo '<div class="mp-field">';
-		echo '<label class="mp-field-label" for="fcm_push_topic">FCM topic</label>';
+		echo '<label class="mp-field-label" for="fcm_push_topic">' . esc_html__( 'FCM topic', 'fcm-push-notify' ) . '</label>';
 		echo '<select name="fcm_push_topic" id="fcm_push_topic" class="mp-topic-select">';
 		foreach ( $topics as $t ) {
 			$t = (string) $t;
@@ -111,7 +116,10 @@ class FCM_Push_CPT {
 		echo '</div>';
 
 		echo '<div class="mp-field">';
-		echo '<label class="mp-field-label" for="fcm_push_deep_link">Deep link <span style="font-weight:400;text-transform:none">(optional)</span></label>';
+		echo '<label class="mp-field-label" for="fcm_push_deep_link">';
+		echo esc_html__( 'Deep link', 'fcm-push-notify' );
+		echo ' <span style="font-weight:400;text-transform:none">(' . esc_html__( 'optional', 'fcm-push-notify' ) . ')</span>';
+		echo '</label>';
 		echo '<input type="text" name="fcm_push_deep_link" id="fcm_push_deep_link" ';
 		echo 'class="mp-deeplink-input" value="' . esc_attr( $deep_link ) . '" ';
 		echo 'placeholder="myapp://section/123" />';
@@ -119,9 +127,14 @@ class FCM_Push_CPT {
 
 		if ( '' !== $sent_at ) {
 			echo '<div class="mp-sent-status"><span class="dashicons dashicons-yes-alt"></span> ';
-			echo 'Sent at ' . esc_html( mysql2date( 'd/m/Y H:i', $sent_at ) ) . '</div>';
+			printf(
+				/* translators: %s: date and time the notification was sent */
+				esc_html__( 'Sent at %s', 'fcm-push-notify' ),
+				esc_html( mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $sent_at ) )
+			);
+			echo '</div>';
 		} else {
-			echo '<div class="mp-pending-status">Will be sent when published.</div>';
+			echo '<div class="mp-pending-status">' . esc_html__( 'Will be sent when published.', 'fcm-push-notify' ) . '</div>';
 		}
 
 		echo '</div>';

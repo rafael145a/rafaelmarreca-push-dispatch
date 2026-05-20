@@ -41,7 +41,10 @@ class FCM_Push {
 
 		$htaccess = $dir . '/.htaccess';
 		if ( ! file_exists( $htaccess ) ) {
-			file_put_contents(
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+			global $wp_filesystem;
+			$wp_filesystem->put_contents(
 				$htaccess,
 				"# FCM Push Notify — blocks public access to service account.\n" .
 				"<IfModule mod_authz_core.c>\n" .
@@ -50,13 +53,10 @@ class FCM_Push {
 				"<IfModule !mod_authz_core.c>\n" .
 				"    Order deny,allow\n" .
 				"    Deny from all\n" .
-				"</IfModule>\n"
+				"</IfModule>\n",
+				FS_CHMOD_FILE
 			);
-		}
-
-		$index = $dir . '/index.html';
-		if ( ! file_exists( $index ) ) {
-			file_put_contents( $index, '' );
+			$wp_filesystem->put_contents( $dir . '/index.html', '', FS_CHMOD_FILE );
 		}
 
 		return $dir;
