@@ -1,4 +1,4 @@
-=== FCM Push Notify ===
+=== RafaelMarreca FCM Push Notify ===
 Contributors: rafael145a
 Tags: fcm, firebase, push notifications, mobile, cloud messaging
 Requires at least: 5.8

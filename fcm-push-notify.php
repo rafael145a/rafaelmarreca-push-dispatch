@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       FCM Push Notify
+ * Plugin Name:       RafaelMarreca FCM Push Notify
  * Plugin URI:        https://github.com/rafael145a/fcm-push-notify
  * Description:       Send Firebase Cloud Messaging (FCM HTTP v1) push notifications to mobile apps when posts are published, or manually via a dedicated notification composer. Zero external dependencies.
  * Version:           1.0.0
