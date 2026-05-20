@@ -8,18 +8,23 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-$opt = get_option( 'fcm_push_settings' );
-if ( is_array( $opt ) && ! empty( $opt['service_account_path'] ) && file_exists( $opt['service_account_path'] ) ) {
-	@unlink( $opt['service_account_path'] );
+$fcm_push_opt = get_option( 'fcm_push_settings' );
+if ( is_array( $fcm_push_opt ) && ! empty( $fcm_push_opt['service_account_path'] ) && file_exists( $fcm_push_opt['service_account_path'] ) ) {
+	wp_delete_file( $fcm_push_opt['service_account_path'] );
 }
 
-$uploads = wp_upload_dir();
-$dir     = trailingslashit( $uploads['basedir'] ) . 'fcm-push-private';
-if ( is_dir( $dir ) ) {
-	foreach ( (array) glob( $dir . '/*' ) as $f ) {
-		@unlink( $f );
+$fcm_push_uploads = wp_upload_dir();
+$fcm_push_dir     = trailingslashit( $fcm_push_uploads['basedir'] ) . 'fcm-push-private';
+
+if ( is_dir( $fcm_push_dir ) ) {
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	WP_Filesystem();
+	global $wp_filesystem;
+
+	foreach ( (array) glob( $fcm_push_dir . '/*' ) as $fcm_push_file ) {
+		$wp_filesystem->delete( $fcm_push_file );
 	}
-	@rmdir( $dir );
+	$wp_filesystem->rmdir( $fcm_push_dir );
 }
 
 delete_option( 'fcm_push_settings' );

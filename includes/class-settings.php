@@ -1,12 +1,6 @@
 <?php
 /**
  * Settings page at Settings → FCM Push Notify.
- *
- * - Upload Firebase service account JSON.
- * - Toggle automatic send on post publish.
- * - Category → FCM topic map.
- * - Default topic (fallback).
- * - Test send button.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -42,7 +36,9 @@ class FCM_Push_Settings {
 		$has_cred = '' !== $settings['service_account_path'] && file_exists( $settings['service_account_path'] );
 
 		$notice = '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only, value set by our own safe redirect
 		if ( isset( $_GET['mp_msg'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$msg_key = sanitize_key( wp_unslash( $_GET['mp_msg'] ) );
 			$notice  = self::format_notice( $msg_key );
 		}
@@ -51,7 +47,7 @@ class FCM_Push_Settings {
 		<div class="wrap">
 			<h1>FCM Push Notify</h1>
 
-			<?php echo $notice; // already escaped in format_notice ?>
+			<?php echo wp_kses_post( $notice ); ?>
 
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">
 				<?php wp_nonce_field( self::ACTION, self::NONCE_NAME ); ?>
@@ -153,17 +149,22 @@ class FCM_Push_Settings {
 
 		$settings = FCM_Push::get_settings();
 
-		if ( ! empty( $_FILES['mp_json']['name'] ) && empty( $_FILES['mp_json']['error'] ) ) {
-			$file = $_FILES['mp_json'];
+		// Explicitly extract and sanitize each $_FILES field we use.
+		$file_name  = isset( $_FILES['mp_json']['name'] ) ? sanitize_file_name( wp_unslash( $_FILES['mp_json']['name'] ) ) : '';
+		$file_error = isset( $_FILES['mp_json']['error'] ) ? (int) $_FILES['mp_json']['error'] : UPLOAD_ERR_NO_FILE;
+		$file_size  = isset( $_FILES['mp_json']['size'] ) ? (int) $_FILES['mp_json']['size'] : 0;
+		$file_tmp   = isset( $_FILES['mp_json']['tmp_name'] ) ? sanitize_text_field( wp_unslash( $_FILES['mp_json']['tmp_name'] ) ) : '';
 
-			if ( UPLOAD_ERR_OK !== (int) $file['error'] ) {
+		if ( '' !== $file_name && UPLOAD_ERR_NO_FILE !== $file_error ) {
+			if ( UPLOAD_ERR_OK !== $file_error ) {
 				self::redirect( 'upload_failed' );
 			}
-			if ( (int) $file['size'] > 64 * 1024 ) {
+			if ( $file_size > 64 * 1024 ) {
 				self::redirect( 'file_too_big' );
 			}
 
-			$tmp_content = file_get_contents( $file['tmp_name'] );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$tmp_content = file_get_contents( $file_tmp );
 			$json        = json_decode( (string) $tmp_content, true );
 			if ( ! is_array( $json ) || empty( $json['type'] ) || 'service_account' !== $json['type'] ) {
 				self::redirect( 'invalid_json' );
@@ -173,16 +174,21 @@ class FCM_Push_Settings {
 			$random    = wp_generate_password( 24, false, false );
 			$dest_path = trailingslashit( $dir ) . 'sa-' . $random . '.json';
 
-			if ( false === file_put_contents( $dest_path, $tmp_content ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+			global $wp_filesystem;
+
+			if ( false === $wp_filesystem->put_contents( $dest_path, $tmp_content, FS_CHMOD_FILE ) ) {
 				self::redirect( 'write_failed' );
 			}
-			@chmod( $dest_path, 0600 );
+			$wp_filesystem->chmod( $dest_path, 0600 );
 
+			// Remove previous key file.
 			if ( ! empty( $settings['service_account_path'] )
 				&& file_exists( $settings['service_account_path'] )
 				&& 0 === strpos( realpath( $settings['service_account_path'] ) ?: '', realpath( $dir ) ?: $dir )
 			) {
-				@unlink( $settings['service_account_path'] );
+				wp_delete_file( $settings['service_account_path'] );
 			}
 
 			$settings['service_account_path'] = $dest_path;
@@ -191,12 +197,12 @@ class FCM_Push_Settings {
 
 		$settings['enabled_auto']  = isset( $_POST['enabled_auto'] ) ? 1 : 0;
 		$settings['default_topic'] = FCM_Push_Dispatcher::sanitize_topic(
-			wp_unslash( $_POST['default_topic'] ?? '' )
+			sanitize_text_field( wp_unslash( $_POST['default_topic'] ?? '' ) )
 		) ?: 'all';
 
 		if ( isset( $_POST['category_topics'] ) && is_array( $_POST['category_topics'] ) ) {
 			$map = [];
-			foreach ( wp_unslash( $_POST['category_topics'] ) as $cat_id => $topic ) {
+			foreach ( array_map( 'sanitize_text_field', wp_unslash( $_POST['category_topics'] ) ) as $cat_id => $topic ) {
 				$cat_id = (int) $cat_id;
 				$topic  = FCM_Push_Dispatcher::sanitize_topic( $topic );
 				if ( $cat_id > 0 && '' !== $topic ) {
@@ -216,7 +222,9 @@ class FCM_Push_Settings {
 		}
 		check_admin_referer( 'fcm_push_test_nonce', 'mp_test_nonce' );
 
-		$topic = FCM_Push_Dispatcher::sanitize_topic( wp_unslash( $_POST['topic'] ?? '' ) );
+		$topic = FCM_Push_Dispatcher::sanitize_topic(
+			sanitize_text_field( wp_unslash( $_POST['topic'] ?? '' ) )
+		);
 		if ( '' === $topic ) {
 			self::redirect( 'test_bad_topic' );
 		}
@@ -261,6 +269,6 @@ class FCM_Push_Settings {
 			return '';
 		}
 		[ $class, $msg ] = $messages[ $key ];
-		return '<div class="notice notice-' . esc_attr( $class ) . ' is-dismissible"><p>' . $msg . '</p></div>';
+		return '<div class="notice notice-' . esc_attr( $class ) . ' is-dismissible"><p>' . esc_html( $msg ) . '</p></div>';
 	}
 }

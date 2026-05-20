@@ -141,7 +141,7 @@ class FCM_Push_CPT {
 		}
 
 		$topic = isset( $_POST['fcm_push_topic'] )
-			? FCM_Push_Dispatcher::sanitize_topic( wp_unslash( $_POST['fcm_push_topic'] ) )
+			? FCM_Push_Dispatcher::sanitize_topic( sanitize_text_field( wp_unslash( $_POST['fcm_push_topic'] ) ) )
 			: '';
 		if ( '' !== $topic ) {
 			update_post_meta( $post_id, self::META_TOPIC, $topic );
