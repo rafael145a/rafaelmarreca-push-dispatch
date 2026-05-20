@@ -47,18 +47,18 @@ class FCM_Push_CPT {
 		register_post_type(
 			FCM_PUSH_CPT,
 			[
-				'label'           => __( 'Notifications', 'fcm-push-notify' ),
+				'label'           => __( 'Notifications', 'rafaelmarreca-fcm-push-notify' ),
 				'labels'          => [
-					'name'               => _x( 'Notifications', 'post type general name', 'fcm-push-notify' ),
-					'singular_name'      => _x( 'Notification', 'post type singular name', 'fcm-push-notify' ),
-					'add_new_item'       => __( 'New Notification', 'fcm-push-notify' ),
-					'edit_item'          => __( 'Edit Notification', 'fcm-push-notify' ),
-					'menu_name'          => _x( 'Notifications', 'admin menu', 'fcm-push-notify' ),
-					'add_new'            => __( 'New Notification', 'fcm-push-notify' ),
-					'view_item'          => __( 'View Notification', 'fcm-push-notify' ),
-					'search_items'       => __( 'Search Notifications', 'fcm-push-notify' ),
-					'not_found'          => __( 'No notifications found.', 'fcm-push-notify' ),
-					'not_found_in_trash' => __( 'No notifications found in Trash.', 'fcm-push-notify' ),
+					'name'               => _x( 'Notifications', 'post type general name', 'rafaelmarreca-fcm-push-notify' ),
+					'singular_name'      => _x( 'Notification', 'post type singular name', 'rafaelmarreca-fcm-push-notify' ),
+					'add_new_item'       => __( 'New Notification', 'rafaelmarreca-fcm-push-notify' ),
+					'edit_item'          => __( 'Edit Notification', 'rafaelmarreca-fcm-push-notify' ),
+					'menu_name'          => _x( 'Notifications', 'admin menu', 'rafaelmarreca-fcm-push-notify' ),
+					'add_new'            => __( 'New Notification', 'rafaelmarreca-fcm-push-notify' ),
+					'view_item'          => __( 'View Notification', 'rafaelmarreca-fcm-push-notify' ),
+					'search_items'       => __( 'Search Notifications', 'rafaelmarreca-fcm-push-notify' ),
+					'not_found'          => __( 'No notifications found.', 'rafaelmarreca-fcm-push-notify' ),
+					'not_found_in_trash' => __( 'No notifications found in Trash.', 'rafaelmarreca-fcm-push-notify' ),
 				],
 				'public'          => false,
 				'show_ui'         => true,
@@ -74,7 +74,7 @@ class FCM_Push_CPT {
 	public static function add_meta_box(): void {
 		add_meta_box(
 			'fcm-push-target',
-			__( 'Send to', 'fcm-push-notify' ),
+			__( 'Send to', 'rafaelmarreca-fcm-push-notify' ),
 			[ __CLASS__, 'render_meta_box' ],
 			FCM_PUSH_CPT,
 			'side',
@@ -102,7 +102,7 @@ class FCM_Push_CPT {
 		echo '<div class="mp-fields-group">';
 
 		echo '<div class="mp-field">';
-		echo '<label class="mp-field-label" for="fcm_push_topic">' . esc_html__( 'FCM topic', 'fcm-push-notify' ) . '</label>';
+		echo '<label class="mp-field-label" for="fcm_push_topic">' . esc_html__( 'FCM topic', 'rafaelmarreca-fcm-push-notify' ) . '</label>';
 		echo '<select name="fcm_push_topic" id="fcm_push_topic" class="mp-topic-select">';
 		foreach ( $topics as $t ) {
 			$t = (string) $t;
@@ -117,8 +117,8 @@ class FCM_Push_CPT {
 
 		echo '<div class="mp-field">';
 		echo '<label class="mp-field-label" for="fcm_push_deep_link">';
-		echo esc_html__( 'Deep link', 'fcm-push-notify' );
-		echo ' <span style="font-weight:400;text-transform:none">(' . esc_html__( 'optional', 'fcm-push-notify' ) . ')</span>';
+		echo esc_html__( 'Deep link', 'rafaelmarreca-fcm-push-notify' );
+		echo ' <span style="font-weight:400;text-transform:none">(' . esc_html__( 'optional', 'rafaelmarreca-fcm-push-notify' ) . ')</span>';
 		echo '</label>';
 		echo '<input type="text" name="fcm_push_deep_link" id="fcm_push_deep_link" ';
 		echo 'class="mp-deeplink-input" value="' . esc_attr( $deep_link ) . '" ';
@@ -129,12 +129,12 @@ class FCM_Push_CPT {
 			echo '<div class="mp-sent-status"><span class="dashicons dashicons-yes-alt"></span> ';
 			printf(
 				/* translators: %s: date and time the notification was sent */
-				esc_html__( 'Sent at %s', 'fcm-push-notify' ),
+				esc_html__( 'Sent at %s', 'rafaelmarreca-fcm-push-notify' ),
 				esc_html( mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $sent_at ) )
 			);
 			echo '</div>';
 		} else {
-			echo '<div class="mp-pending-status">' . esc_html__( 'Will be sent when published.', 'fcm-push-notify' ) . '</div>';
+			echo '<div class="mp-pending-status">' . esc_html__( 'Will be sent when published.', 'rafaelmarreca-fcm-push-notify' ) . '</div>';
 		}
 
 		echo '</div>';

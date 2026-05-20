@@ -8,7 +8,7 @@
  * Author URI:        https://github.com/rafael145a
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       fcm-push-notify
+ * Text Domain:       rafaelmarreca-fcm-push-notify
  * Domain Path:       /languages
  * Requires PHP:      7.4
  * Requires at least: 5.8

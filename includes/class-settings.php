@@ -19,8 +19,8 @@ class FCM_Push_Settings {
 
 	public static function add_menu(): void {
 		add_options_page(
-			__( 'FCM Push Notify', 'fcm-push-notify' ),
-			__( 'FCM Push Notify', 'fcm-push-notify' ),
+			__( 'FCM Push Notify', 'rafaelmarreca-fcm-push-notify' ),
+			__( 'FCM Push Notify', 'rafaelmarreca-fcm-push-notify' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			[ __CLASS__, 'render' ]
@@ -29,7 +29,7 @@ class FCM_Push_Settings {
 
 	public static function render(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'fcm-push-notify' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'rafaelmarreca-fcm-push-notify' ) );
 		}
 
 		$settings = FCM_Push::get_settings();
@@ -45,7 +45,7 @@ class FCM_Push_Settings {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'FCM Push Notify', 'fcm-push-notify' ); ?></h1>
+			<h1><?php esc_html_e( 'FCM Push Notify', 'rafaelmarreca-fcm-push-notify' ); ?></h1>
 
 			<?php echo wp_kses_post( $notice ); ?>
 
@@ -53,10 +53,10 @@ class FCM_Push_Settings {
 				<?php wp_nonce_field( self::ACTION, self::NONCE_NAME ); ?>
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION ); ?>" />
 
-				<h2><?php esc_html_e( 'Credentials', 'fcm-push-notify' ); ?></h2>
+				<h2><?php esc_html_e( 'Credentials', 'rafaelmarreca-fcm-push-notify' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="mp_json"><?php esc_html_e( 'Service account JSON', 'fcm-push-notify' ); ?></label></th>
+						<th scope="row"><label for="mp_json"><?php esc_html_e( 'Service account JSON', 'rafaelmarreca-fcm-push-notify' ); ?></label></th>
 						<td>
 							<?php if ( $has_cred ) : ?>
 								<p>
@@ -64,15 +64,15 @@ class FCM_Push_Settings {
 									<?php
 									printf(
 										/* translators: %s: Firebase project ID */
-										esc_html__( 'Configured — project: %s', 'fcm-push-notify' ),
-										'<code>' . esc_html( $settings['project_id'] ?: __( '(unknown)', 'fcm-push-notify' ) ) . '</code>'
+										esc_html__( 'Configured — project: %s', 'rafaelmarreca-fcm-push-notify' ),
+										'<code>' . esc_html( $settings['project_id'] ?: __( '(unknown)', 'rafaelmarreca-fcm-push-notify' ) ) . '</code>'
 									);
 									?>
 								</p>
 							<?php else : ?>
 								<p style="color:#d63638">
 									<span class="dashicons dashicons-warning"></span>
-									<?php esc_html_e( 'Not configured. The plugin will not send notifications until this is set.', 'fcm-push-notify' ); ?>
+									<?php esc_html_e( 'Not configured. The plugin will not send notifications until this is set.', 'rafaelmarreca-fcm-push-notify' ); ?>
 								</p>
 							<?php endif; ?>
 							<input type="file" name="mp_json" id="mp_json" accept="application/json,.json" />
@@ -80,7 +80,7 @@ class FCM_Push_Settings {
 								<?php
 								printf(
 									/* translators: %s: directory path */
-									esc_html__( 'Download from Firebase Console → ⚙ Project settings → Service accounts → Generate new private key. The file is stored outside the database in %s.', 'fcm-push-notify' ),
+									esc_html__( 'Download from Firebase Console → ⚙ Project settings → Service accounts → Generate new private key. The file is stored outside the database in %s.', 'rafaelmarreca-fcm-push-notify' ),
 									'<code>wp-content/uploads/fcm-push-private/</code>'
 								);
 								?>
@@ -89,32 +89,32 @@ class FCM_Push_Settings {
 					</tr>
 				</table>
 
-				<h2><?php esc_html_e( 'Automatic send', 'fcm-push-notify' ); ?></h2>
+				<h2><?php esc_html_e( 'Automatic send', 'rafaelmarreca-fcm-push-notify' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'On post publish', 'fcm-push-notify' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'On post publish', 'rafaelmarreca-fcm-push-notify' ); ?></th>
 						<td>
 							<label>
 								<input type="checkbox" name="enabled_auto" value="1"
 									<?php checked( ! empty( $settings['enabled_auto'] ) ); ?> />
-								<?php esc_html_e( 'Send a push notification automatically when a post is published.', 'fcm-push-notify' ); ?>
+								<?php esc_html_e( 'Send a push notification automatically when a post is published.', 'rafaelmarreca-fcm-push-notify' ); ?>
 							</label>
-							<p class="description"><?php esc_html_e( "The post's primary category determines the FCM topic (see map below).", 'fcm-push-notify' ); ?></p>
+							<p class="description"><?php esc_html_e( "The post's primary category determines the FCM topic (see map below).", 'rafaelmarreca-fcm-push-notify' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="default_topic"><?php esc_html_e( 'Default topic', 'fcm-push-notify' ); ?></label></th>
+						<th scope="row"><label for="default_topic"><?php esc_html_e( 'Default topic', 'rafaelmarreca-fcm-push-notify' ); ?></label></th>
 						<td>
 							<input type="text" name="default_topic" id="default_topic"
 								value="<?php echo esc_attr( $settings['default_topic'] ); ?>"
 								class="regular-text" />
-							<p class="description"><?php esc_html_e( "Used when the post's category is not in the map below.", 'fcm-push-notify' ); ?></p>
+							<p class="description"><?php esc_html_e( "Used when the post's category is not in the map below.", 'rafaelmarreca-fcm-push-notify' ); ?></p>
 						</td>
 					</tr>
 				</table>
 
-				<h2><?php esc_html_e( 'Category → topic map', 'fcm-push-notify' ); ?></h2>
-				<p><?php esc_html_e( 'Map WordPress category IDs to the FCM topic your app subscribes to.', 'fcm-push-notify' ); ?></p>
+				<h2><?php esc_html_e( 'Category → topic map', 'rafaelmarreca-fcm-push-notify' ); ?></h2>
+				<p><?php esc_html_e( 'Map WordPress category IDs to the FCM topic your app subscribes to.', 'rafaelmarreca-fcm-push-notify' ); ?></p>
 				<table class="form-table" role="presentation">
 					<?php foreach ( $settings['category_topics'] as $cat_id => $topic ) : ?>
 						<tr>
@@ -123,14 +123,14 @@ class FCM_Push_Settings {
 									<?php
 									printf(
 										/* translators: %d: category ID */
-										esc_html__( 'Category %d', 'fcm-push-notify' ),
+										esc_html__( 'Category %d', 'rafaelmarreca-fcm-push-notify' ),
 										(int) $cat_id
 									);
 									?>
 								</label><br />
 								<small><?php
 									$cat = get_category( (int) $cat_id );
-									echo esc_html( $cat instanceof WP_Term ? $cat->name : __( '(not found in WordPress)', 'fcm-push-notify' ) );
+									echo esc_html( $cat instanceof WP_Term ? $cat->name : __( '(not found in WordPress)', 'rafaelmarreca-fcm-push-notify' ) );
 								?></small>
 							</th>
 							<td>
@@ -143,18 +143,18 @@ class FCM_Push_Settings {
 					<?php endforeach; ?>
 				</table>
 
-				<?php submit_button( __( 'Save', 'fcm-push-notify' ) ); ?>
+				<?php submit_button( __( 'Save', 'rafaelmarreca-fcm-push-notify' ) ); ?>
 			</form>
 
 			<hr />
-			<h2><?php esc_html_e( 'Test send', 'fcm-push-notify' ); ?></h2>
-			<p><?php esc_html_e( 'Sends a test notification with title "FCM Push Notify — test" to the topic below.', 'fcm-push-notify' ); ?></p>
+			<h2><?php esc_html_e( 'Test send', 'rafaelmarreca-fcm-push-notify' ); ?></h2>
+			<p><?php esc_html_e( 'Sends a test notification with title "FCM Push Notify — test" to the topic below.', 'rafaelmarreca-fcm-push-notify' ); ?></p>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<?php wp_nonce_field( 'fcm_push_test_nonce', 'mp_test_nonce' ); ?>
 				<input type="hidden" name="action" value="fcm_push_test" />
 				<input type="text" name="topic" value="<?php echo esc_attr( $settings['default_topic'] ); ?>"
 					class="regular-text" />
-				<button type="submit" class="button" <?php disabled( ! $has_cred ); ?>><?php esc_html_e( 'Send test', 'fcm-push-notify' ); ?></button>
+				<button type="submit" class="button" <?php disabled( ! $has_cred ); ?>><?php esc_html_e( 'Send test', 'rafaelmarreca-fcm-push-notify' ); ?></button>
 			</form>
 		</div>
 		<?php
@@ -162,7 +162,7 @@ class FCM_Push_Settings {
 
 	public static function handle_save(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'fcm-push-notify' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'rafaelmarreca-fcm-push-notify' ) );
 		}
 		check_admin_referer( self::ACTION, self::NONCE_NAME );
 
@@ -235,7 +235,7 @@ class FCM_Push_Settings {
 
 	public static function handle_test_send(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'fcm-push-notify' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'rafaelmarreca-fcm-push-notify' ) );
 		}
 		check_admin_referer( 'fcm_push_test_nonce', 'mp_test_nonce' );
 
@@ -249,8 +249,8 @@ class FCM_Push_Settings {
 		$client = new FCM_Push_Client();
 		$result = $client->send_to_topic(
 			$topic,
-			__( 'FCM Push Notify — test', 'fcm-push-notify' ),
-			__( 'If you see this, your Firebase setup is working. ✅', 'fcm-push-notify' ),
+			__( 'FCM Push Notify — test', 'rafaelmarreca-fcm-push-notify' ),
+			__( 'If you see this, your Firebase setup is working. ✅', 'rafaelmarreca-fcm-push-notify' ),
 			[ 'type' => 'test', 'sent_at' => current_time( 'mysql' ) ]
 		);
 
@@ -273,18 +273,18 @@ class FCM_Push_Settings {
 
 	private static function format_notice( string $key ): string {
 		$messages = [
-			'saved'          => [ 'updated', __( 'Settings saved.', 'fcm-push-notify' ) ],
-			'upload_failed'  => [ 'error',   __( 'JSON upload failed.', 'fcm-push-notify' ) ],
-			'file_too_big'   => [ 'error',   __( 'File too large (max 64 KB).', 'fcm-push-notify' ) ],
-			'invalid_json'   => [ 'error',   __( 'File is not a valid service account JSON.', 'fcm-push-notify' ) ],
-			'write_failed'   => [ 'error',   __( 'Could not write file to uploads/.', 'fcm-push-notify' ) ],
-			'test_ok'        => [ 'updated', __( 'Test notification sent successfully.', 'fcm-push-notify' ) ],
-			'test_bad_topic' => [ 'error',   __( 'Invalid topic name.', 'fcm-push-notify' ) ],
+			'saved'          => [ 'updated', __( 'Settings saved.', 'rafaelmarreca-fcm-push-notify' ) ],
+			'upload_failed'  => [ 'error',   __( 'JSON upload failed.', 'rafaelmarreca-fcm-push-notify' ) ],
+			'file_too_big'   => [ 'error',   __( 'File too large (max 64 KB).', 'rafaelmarreca-fcm-push-notify' ) ],
+			'invalid_json'   => [ 'error',   __( 'File is not a valid service account JSON.', 'rafaelmarreca-fcm-push-notify' ) ],
+			'write_failed'   => [ 'error',   __( 'Could not write file to uploads/.', 'rafaelmarreca-fcm-push-notify' ) ],
+			'test_ok'        => [ 'updated', __( 'Test notification sent successfully.', 'rafaelmarreca-fcm-push-notify' ) ],
+			'test_bad_topic' => [ 'error',   __( 'Invalid topic name.', 'rafaelmarreca-fcm-push-notify' ) ],
 			'test_failed'    => [
 				'error',
 				sprintf(
 					/* translators: %s: error message from FCM */
-					__( 'Test failed: %s', 'fcm-push-notify' ),
+					__( 'Test failed: %s', 'rafaelmarreca-fcm-push-notify' ),
 					esc_html( (string) get_transient( 'fcm_push_last_test_error' ) )
 				),
 			],
