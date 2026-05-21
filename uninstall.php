@@ -14,7 +14,7 @@ if ( is_array( $fcm_push_opt ) && ! empty( $fcm_push_opt['service_account_path']
 }
 
 $fcm_push_uploads = wp_upload_dir();
-$fcm_push_dir     = trailingslashit( $fcm_push_uploads['basedir'] ) . 'fcm-push-private';
+$fcm_push_dir     = trailingslashit( $fcm_push_uploads['basedir'] ) . 'rafaelmarreca-push-private';
 
 if ( is_dir( $fcm_push_dir ) ) {
 	require_once ABSPATH . 'wp-admin/includes/file.php';

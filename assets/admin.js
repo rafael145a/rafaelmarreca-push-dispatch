@@ -1,4 +1,4 @@
-/* FCM Push Notify — Notification Composer interactions */
+/* RafaelMarreca Push Dispatch — Notification Composer interactions */
 /* global tinymce, wp, fcmPushData */
 
 wp.domReady( function () {

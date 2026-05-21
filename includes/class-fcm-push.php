@@ -29,11 +29,11 @@ class FCM_Push {
 	}
 
 	/**
-	 * Creates wp-content/uploads/fcm-push-private/ with .htaccess deny. Idempotent.
+	 * Creates wp-content/uploads/rafaelmarreca-push-private/ with .htaccess deny. Idempotent.
 	 */
 	public static function ensure_private_dir(): string {
 		$uploads = wp_upload_dir();
-		$dir     = trailingslashit( $uploads['basedir'] ) . 'fcm-push-private';
+		$dir     = trailingslashit( $uploads['basedir'] ) . 'rafaelmarreca-push-private';
 
 		if ( ! file_exists( $dir ) ) {
 			wp_mkdir_p( $dir );
@@ -46,7 +46,7 @@ class FCM_Push {
 			global $wp_filesystem;
 			$wp_filesystem->put_contents(
 				$htaccess,
-				"# FCM Push Notify — blocks public access to service account.\n" .
+				"# RafaelMarreca Push Dispatch — blocks public access to service account.\n" .
 				"<IfModule mod_authz_core.c>\n" .
 				"    Require all denied\n" .
 				"</IfModule>\n" .

@@ -60,7 +60,7 @@ class FCM_Push_Client {
 				'android'      => [
 					'priority'     => 'high',
 					'notification' => [
-						'channel_id' => 'fcm-push-notify',
+						'channel_id' => 'rafaelmarreca-push',
 					],
 				],
 				'apns'         => [
@@ -222,9 +222,6 @@ class FCM_Push_Client {
 		}
 
 		$ok = openssl_sign( $signing_input, $signature, $key, OPENSSL_ALGO_SHA256 );
-		if ( PHP_VERSION_ID < 80000 && is_resource( $key ) ) {
-			openssl_free_key( $key );
-		}
 
 		if ( ! $ok ) {
 			return new WP_Error( 'sign_failed', 'JWT signing failed: ' . openssl_error_string() );

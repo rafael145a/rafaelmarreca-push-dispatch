@@ -36,9 +36,9 @@ class FCM_Push_CPT {
 		$base = plugin_dir_url( FCM_PUSH_FILE ) . 'assets/';
 		$ver  = FCM_PUSH_VERSION;
 
-		wp_enqueue_style( 'fcm-push-admin', $base . 'admin.css', [], $ver );
-		wp_enqueue_script( 'fcm-push-admin', $base . 'admin.js', [ 'wp-dom-ready' ], $ver, true );
-		wp_localize_script( 'fcm-push-admin', 'fcmPushData', [
+		wp_enqueue_style( 'rafaelmarreca-push-admin', $base . 'admin.css', [], $ver );
+		wp_enqueue_script( 'rafaelmarreca-push-admin', $base . 'admin.js', [ 'wp-dom-ready' ], $ver, true );
+		wp_localize_script( 'rafaelmarreca-push-admin', 'fcmPushData', [
 			'siteName' => get_bloginfo( 'name' ),
 		] );
 	}
@@ -47,18 +47,18 @@ class FCM_Push_CPT {
 		register_post_type(
 			FCM_PUSH_CPT,
 			[
-				'label'           => __( 'Notifications', 'rafaelmarreca-fcm-push-notify' ),
+				'label'           => __( 'Notifications', 'rafaelmarreca-push-dispatch' ),
 				'labels'          => [
-					'name'               => _x( 'Notifications', 'post type general name', 'rafaelmarreca-fcm-push-notify' ),
-					'singular_name'      => _x( 'Notification', 'post type singular name', 'rafaelmarreca-fcm-push-notify' ),
-					'add_new_item'       => __( 'New Notification', 'rafaelmarreca-fcm-push-notify' ),
-					'edit_item'          => __( 'Edit Notification', 'rafaelmarreca-fcm-push-notify' ),
-					'menu_name'          => _x( 'Notifications', 'admin menu', 'rafaelmarreca-fcm-push-notify' ),
-					'add_new'            => __( 'New Notification', 'rafaelmarreca-fcm-push-notify' ),
-					'view_item'          => __( 'View Notification', 'rafaelmarreca-fcm-push-notify' ),
-					'search_items'       => __( 'Search Notifications', 'rafaelmarreca-fcm-push-notify' ),
-					'not_found'          => __( 'No notifications found.', 'rafaelmarreca-fcm-push-notify' ),
-					'not_found_in_trash' => __( 'No notifications found in Trash.', 'rafaelmarreca-fcm-push-notify' ),
+					'name'               => _x( 'Notifications', 'post type general name', 'rafaelmarreca-push-dispatch' ),
+					'singular_name'      => _x( 'Notification', 'post type singular name', 'rafaelmarreca-push-dispatch' ),
+					'add_new_item'       => __( 'New Notification', 'rafaelmarreca-push-dispatch' ),
+					'edit_item'          => __( 'Edit Notification', 'rafaelmarreca-push-dispatch' ),
+					'menu_name'          => _x( 'Notifications', 'admin menu', 'rafaelmarreca-push-dispatch' ),
+					'add_new'            => __( 'New Notification', 'rafaelmarreca-push-dispatch' ),
+					'view_item'          => __( 'View Notification', 'rafaelmarreca-push-dispatch' ),
+					'search_items'       => __( 'Search Notifications', 'rafaelmarreca-push-dispatch' ),
+					'not_found'          => __( 'No notifications found.', 'rafaelmarreca-push-dispatch' ),
+					'not_found_in_trash' => __( 'No notifications found in Trash.', 'rafaelmarreca-push-dispatch' ),
 				],
 				'public'          => false,
 				'show_ui'         => true,
@@ -74,7 +74,7 @@ class FCM_Push_CPT {
 	public static function add_meta_box(): void {
 		add_meta_box(
 			'fcm-push-target',
-			__( 'Send to', 'rafaelmarreca-fcm-push-notify' ),
+			__( 'Send to', 'rafaelmarreca-push-dispatch' ),
 			[ __CLASS__, 'render_meta_box' ],
 			FCM_PUSH_CPT,
 			'side',
@@ -102,7 +102,7 @@ class FCM_Push_CPT {
 		echo '<div class="mp-fields-group">';
 
 		echo '<div class="mp-field">';
-		echo '<label class="mp-field-label" for="fcm_push_topic">' . esc_html__( 'FCM topic', 'rafaelmarreca-fcm-push-notify' ) . '</label>';
+		echo '<label class="mp-field-label" for="fcm_push_topic">' . esc_html__( 'Topic', 'rafaelmarreca-push-dispatch' ) . '</label>';
 		echo '<select name="fcm_push_topic" id="fcm_push_topic" class="mp-topic-select">';
 		foreach ( $topics as $t ) {
 			$t = (string) $t;
@@ -117,8 +117,8 @@ class FCM_Push_CPT {
 
 		echo '<div class="mp-field">';
 		echo '<label class="mp-field-label" for="fcm_push_deep_link">';
-		echo esc_html__( 'Deep link', 'rafaelmarreca-fcm-push-notify' );
-		echo ' <span style="font-weight:400;text-transform:none">(' . esc_html__( 'optional', 'rafaelmarreca-fcm-push-notify' ) . ')</span>';
+		echo esc_html__( 'Deep link', 'rafaelmarreca-push-dispatch' );
+		echo ' <span style="font-weight:400;text-transform:none">(' . esc_html__( 'optional', 'rafaelmarreca-push-dispatch' ) . ')</span>';
 		echo '</label>';
 		echo '<input type="text" name="fcm_push_deep_link" id="fcm_push_deep_link" ';
 		echo 'class="mp-deeplink-input" value="' . esc_attr( $deep_link ) . '" ';
@@ -129,12 +129,12 @@ class FCM_Push_CPT {
 			echo '<div class="mp-sent-status"><span class="dashicons dashicons-yes-alt"></span> ';
 			printf(
 				/* translators: %s: date and time the notification was sent */
-				esc_html__( 'Sent at %s', 'rafaelmarreca-fcm-push-notify' ),
+				esc_html__( 'Sent at %s', 'rafaelmarreca-push-dispatch' ),
 				esc_html( mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $sent_at ) )
 			);
 			echo '</div>';
 		} else {
-			echo '<div class="mp-pending-status">' . esc_html__( 'Will be sent when published.', 'rafaelmarreca-fcm-push-notify' ) . '</div>';
+			echo '<div class="mp-pending-status">' . esc_html__( 'Will be sent when published.', 'rafaelmarreca-push-dispatch' ) . '</div>';
 		}
 
 		echo '</div>';
